@@ -1,7 +1,7 @@
 # FeatureBoard
 
 This is a project by multiple students at the Gymnasium Gröbenzell. The project was to build a LED-Matrix (24 x 16).
-This is the software for controlling the matrix run on a Raspberry Pi. It was created by Nils Cremer.
+This is the software for controlling the matrix run on a Raspberry Pi.
 
 ## Installation
 
@@ -80,6 +80,10 @@ If the folder where your script is contains the featureboard folder you can also
 ```bash
 python3 name_of_your_script.py
 ```
+
+## Help
+
+This sofware was created by Nils Cremer. If you need any help contact me.
 
 
 
