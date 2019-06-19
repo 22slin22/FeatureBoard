@@ -1,21 +1,21 @@
 import numpy as np
 
 COLORS = {}
-for k in ["o", "off", "black", "a", "aus", "schwarz"]:
+for k in ["o", "off"]:
     COLORS[k] = (False, False, False)
-for k in ["b", "blue", "blau"]:
+for k in ["b", "blue"]:
     COLORS[k] = (True, False, False)
-for k in ["g", "green", "gruen"]:
+for k in ["g", "green"]:
     COLORS[k] = (False, True, False)
-for k in ["r", "red", "rot"]:
+for k in ["r", "red"]:
     COLORS[k] = (False, False, True)
-for k in ["c", "cyan", "lightblue", "hellblau", "tuerkis"]:
+for k in ["c", "cyan"]:
     COLORS[k] = (True, True, False)
 for k in ["m", "magenta"]:
     COLORS[k] = (True, False, True)
-for k in ["y", "yelllow", "ge", "gelb"]:
+for k in ["y", "yelllow"]:
     COLORS[k] = (False, True, True)
-for k in ["w", "white", "weiss"]:
+for k in ["w", "white"]:
     COLORS[k] = (True, True, True)
 
 
@@ -27,10 +27,13 @@ class Matrix:
         num_columns = 3 * 8
         num_colors = 3
         self.array = np.zeros((self.num_rows, num_columns, num_colors), dtype=bool)
-        self.rows = np.zeros((self.num_rows, num_columns * num_colors), dtype=bool)     # this array stores data that can be directly send to the shift registers
+        # self.rows stores data that can be directly send to the shift registers
+        # it is computed every time the array is changes.
+        self.rows = np.zeros((self.num_rows, num_columns * num_colors), dtype=bool)
 
     def clear(self):
         self.array[:][:] = COLORS["off"]
+        self._update_rows()
 
     def set_led(self, row, column, color):
         self._check_color(color)
@@ -45,6 +48,7 @@ class Matrix:
     def set_column(self, column, color):
         self._check_color(color)
         self.array[:, column] = COLORS[color]
+        self._update_rows()
 
     def _update_rows(self):
         """copy the content of self.array to self.rows"""
