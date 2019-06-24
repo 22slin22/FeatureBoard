@@ -5,7 +5,7 @@ from featureboard.board import Board
 
 pygame.init()
 
-FPS = 3
+FPS = 4
 BOARDS = 3
 USE_MONITOR = True
 
@@ -30,15 +30,21 @@ class Game:
 
     def run(self):
         while self.running:
-            self.tick()
             self.draw()
             # one frame per second
             self.clock.tick(FPS)
+            # tick has to be at the end because it changes self.running (if dead)
+            self.tick()
+
+        print("your score was", len(self.snake.body))
         self.led_board.matrix.clear()
 
     def tick(self):
         self.key_inputs()
         self.snake.move()
+        if self.check_dead():
+            self.running = False
+            return
         if self.snake.check_food_eaten(self.food):
             self.snake.grow = True
             self. food = self.get_random_food_position()
@@ -46,10 +52,19 @@ class Game:
             self.snake.grow = False
 
     def draw(self):
+        """draws the next frame to the screen
+        only draws changes and not the entire screen for efficiency
+        """
+
         if USE_MONITOR:
+            # remove the tail from screen
             if self.snake.tail_removed is not None:
                 pygame.draw.rect(self.screen, [255, 255, 255], [self.snake.tail_removed[1] * 40, self.snake.tail_removed[0] * 40, 40, 40])
-            pygame.draw.rect(self.screen, [0, 255, 0], [self.snake.head[1] * 40, self.snake.head[0] * 40, 40, 40])
+            # make the last head green
+            if len(self.snake.body) >= 2:
+                pygame.draw.rect(self.screen, [0, 255, 0], [self.snake.body[-2][1] * 40, self.snake.body[-2][0] * 40, 40, 40])
+            # draw the new head in blue
+            pygame.draw.rect(self.screen, [0, 0, 255], [self.snake.head[1] * 40, self.snake.head[0] * 40, 40, 40])
             pygame.draw.rect(self.screen, [255, 0, 0], [self.food[1] * 40, self.food[0] * 40, 40, 40])
             pygame.display.flip()
 
@@ -74,7 +89,7 @@ class Game:
         if self.snake.head[1] < 0 or self.snake.head[1] >= self.width:
             return True
         # check if the head went into the body
-        if self.snake.head in self.snake.body[:-1]:
+        if tuple(self.snake.head) in self.snake.body[:-1]:
             return True
         return False
 
