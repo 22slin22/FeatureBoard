@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='editor.css') }}">
+{% endblock %}
+
+{% block content %}
+	<div class="text-left" id="frames">
+		<!-- this has to on one line, so no weird extra margins appear -->
+		{% for frame in current_project.frames %}<button type="button" class="btn btn-secondary btn-md" onclick="changeFrame(this);" id="frame{{ loop.index0 }}">Frame {{ loop.index }}</button>{% endfor %}<button type="button" class="btn btn-outline-secondary btn-md" id="new-frame-button" onclick="addNewFrame()">New Frame</button>
+	</div>
+
+	{% for panel_row in range(1) %}     <!-- change 1 to 2 if 6 panels are connected -->
+		<div class="row panel-row">
+			{% for panel in range(3) %}
+				<div class="col-xl col-12 panel">
+					{% for row in range(8) %}
+						<div class="row led-row">
+							{% for half_row in range(2) %}
+								<div class="col-6">
+									<div class="row">
+										{% for led in range(4) %}
+											<div id="{{ panel_row|string + panel|string + row|string + half_row|string +  led|string}}" class="col-3 led border border-secondary text-center" onclick="changeButtonColor(this)"></div>
+										{% endfor %}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% endfor %}
+				</div>
+			{% endfor %}
+		</div>
+	{% endfor %}
+
+
+	<div class="row">
+		<div class="col-2">
+			<div class="text-center">
+	         	<label for="recipient-name" class="col-form-label pb-0">FPS</label>
+        		<input type="text" class="form-control text-center" id="fps-input" name="project-name">
+	        </div>
+		</div>
+
+		<div class="col-8">
+			<div class="row" id="colors">
+				<div class="col-6">
+					<div class="row">
+						<div class="col-3 color">
+							<button type="button" class="btn btn-secondary btn-block color-button black" onclick="changeSelectedColor(this, 'black' )"></button>
+						</div>
+						<div class="col-3 color">
+							<button type="button" id="blue" class="btn btn-secondary btn-block color-button blue" onclick="changeSelectedColor(this, 'blue' )"></button>
+						</div>
+						<div class="col-3 color">
+							<button type="button" id="green" class="btn btn-secondary btn-block color-button green" onclick="changeSelectedColor(this, 'green' )"></button>
+						</div>
+						<div class="col-3 color">
+							<button type="button" id="red" class="btn btn-secondary btn-block color-button red" onclick="changeSelectedColor(this, 'red' )"></button>
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="row">
+						<div class="col-3 color">
+							<button type="button" id="cyan" class="btn btn-secondary btn-block color-button cyan" onclick="changeSelectedColor(this, 'cyan' )"></button>
+						</div>
+						<div class="col-3 color">
+							<button type="button" id="magenta" class="btn btn-secondary btn-block color-button magenta" onclick="changeSelectedColor(this, 'magenta' )"></button>
+						</div>
+						<div class="col-3 color">
+							<button type="button" id="yellow" class="btn btn-secondary btn-block color-button yellow" onclick="changeSelectedColor(this, 'yellow' )"></button>
+						</div>
+						<div class="col-3 color">
+							<button type="button" id="white" class="btn btn-secondary btn-block color-button white" onclick="changeSelectedColor(this, 'white' )"></button>
+						</div>		
+					</div>
+				</div>	
+			</div>
+		</div>
+
+		<div class="col-2 align-self-center">
+			<button type="button" class="btn btn-primary btn-block btn-lg" id="save-project" onclick="saveProject();">
+				Save
+			</button>
+		</div>
+	</div>	
+
+{% endblock %}
+
+{% block scripts %}
+	<script src="/static/editor.js"></script>
+	<!-- this has to be in html in order to reference current_project -->
+	<script type="text/javascript">
+		window.onload = function(){
+			init_editor('{{ current_project|tojson|safe }}');
+		}
+	</script>
+{% endblock %}

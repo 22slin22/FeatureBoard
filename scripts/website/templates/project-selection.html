@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='project-selection.css') }}">
+{% endblock %}
+
+{% block content %}
+	
+	<div class="container-fluid">
+		{% for project in projects %}
+			<button type="button" class="btn btn-secondary btn-lg project-button" id="{{ project.name }}" data-toggle="modal" data-target="#project-details-modal" data-project-name="{{ project.name }}">
+				{{ project.name }}
+			</button>
+		{% endfor %}
+		<button type="button" class="btn btn-outline-secondary btn-lg project-button" id="new-project-button" data-toggle="modal" data-target="#new-project-modal">
+			New project
+		</button>
+
+		<!-- project details modal -->
+		<div class="modal fade" id="project-details-modal" tabindex="-1" role="dialog" aria-labelledby="project-details-modal-title" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered modal-xl" role="document" id="modal-details">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="project-details-modal-title">Project name</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div class="row justify-content-center p-2">
+                    <form class="w-100" action="/play" method="POST">
+	        			<input type="hidden" name="project-name" value="Project name" class="hidden-project-name">
+                        <button type="submit" class="btn btn-success btn-lg btn-block">Play</button>
+                    </form>
+	        		<form class="w-100" action="/editor" method="POST">
+	        			<input type="hidden" name="project-name" value="Project name" class="hidden-project-name">
+	        			<button type="submit" class="btn btn-warning btn-lg btn-block mt-1" id="edit-project">Edit</button>
+	        		</form>
+		        </div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- create new project modal -->
+		<div class="modal fade" id="new-project-modal" tabindex="-1" role="dialog" aria-labelledby="new-project-modal-title" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="new-project-modal-title">Create new Project</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <form action="/editor" method="POST">
+			      <div class="modal-body">
+			        <div class="text-left">
+			         	<label for="recipient-name" class="col-form-label">Project name:</label>
+		        		<input type="text" class="form-control" id="new-project-name" name="project-name">
+			        </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			        <button type="submit" class="btn btn-primary" id="create-new-project-button">Create</button>
+			      </div>
+			    </form>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+.project-button{
+	min-height: 5rem;
+	min-width: 8rem;
+	margin: 4px;
+}
+
+@media(max-width: 992px){
+	.project-button {
+		min-height: 10rem;
+		min-width: 16rem;
+		font-size: 36px;
+	}
+}
+
+/*
+#modal-details {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}*/
+
+@media(min-width: 992px){
+#modal-details {width: 800px;}}
+
+@media(min-width: 1200px){
+#modal-details {width: 1000px;}}
+
+@media(min-width: 1550px){
+#modal-details {width: 400px;}}
+
+
+#new-project-modal,
+#project-details-modal,
+#exampleModal{
+	color: #222;
+}
+
+button#edit-project{
+	color: white;
+}
