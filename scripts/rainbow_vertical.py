@@ -13,7 +13,7 @@ if __name__ == '__main__':
     try:
         num_panels = int(num_panels)
         width = int(width)
-        wait_time = int(wait_time)
+        wait_time = float(wait_time)
     except ValueError:
         print("all values entered must be integers")
         exit()

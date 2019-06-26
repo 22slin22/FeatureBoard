@@ -13,7 +13,7 @@ for k in ["c", "cyan"]:
     COLORS[k] = (True, True, False)
 for k in ["m", "magenta"]:
     COLORS[k] = (True, False, True)
-for k in ["y", "yelllow"]:
+for k in ["y", "yellow"]:
     COLORS[k] = (False, True, True)
 for k in ["w", "white"]:
     COLORS[k] = (True, True, True)
@@ -50,6 +50,22 @@ class Matrix:
         self.array[:, column] = COLORS[color]
         self._update_rows()
 
+    def set_array(self, array):
+        """replay the entire matrix with an array
+        array must be the same shape as matrix.array
+        array must only contain colors
+        """
+        if isinstance(array, list):
+            array = np.array(array)
+        assert isinstance(array, np.ndarray), "array has to be of type list or np.ndarray"
+        assert array.shape == self.array.shape[:2], "array ({}) has to have shape {}".format(array.shape, self.array.shape[:2])
+
+        for r, row in enumerate(array):
+            for l, led in enumerate(row):
+                for key, val in COLORS.items():
+                    if led == key:
+                        self.array[r][l] = val
+
     def _update_rows(self):
         """copy the content of self.array to self.rows"""
         for i, row in enumerate(self.array):
@@ -75,8 +91,8 @@ class Matrix:
         """get a row in the correct order for sending it to the shift registers"""
         return self.rows[row_num]
 
-    def _check_color(self, color):
-        assert color in COLORS, 'color must be one of ("b", "blue", "blau", "g", "green", "gruen", "grün", ' \
-                                '"r", "red", "rot", "c", "cyan", "lightblue", "hellblau", "tuerkis", "türkis", ' \
-                                '"m", "magenta", "y", "yelllow", "ge", "gelb", "w", "white", "weiss", "weiß")'
+    @staticmethod
+    def _check_color(color):
+        assert color in COLORS, 'color must be one of ("b", "blue", "g", "green", "r", "red", "c", "cyan",' \
+                                ' "m", "magenta", "y", "yelllow", "w", "white")'
 

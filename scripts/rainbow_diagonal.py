@@ -13,7 +13,7 @@ if __name__ == '__main__':
     try:
         num_panels = int(num_panels)
         width = int(width)
-        wait_time = int(wait_time)
+        wait_time = float(wait_time)
     except ValueError:
         print("all values entered must be integers")
         exit()
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     while True:
         for column in range(24):
-            for row in range(8 * (int(num_panels / 3) + 1)):
+            for row in range(8 * int(num_panels / 3)):
                 color_index = int(math.floor((column + row + index) / width))
                 color_index %= len(COLORS)
                 board.matrix.set_led(row, column, COLORS[color_index])
